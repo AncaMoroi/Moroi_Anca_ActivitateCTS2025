@@ -1,6 +1,7 @@
 import Continente.Asia;
 import Continente.Europa;
 import EagerInitialization.Moldova;
+import PregatireTest.ConfigurationManager;
 import ThreadSafe.AnimaleDomestice;
 
 public class Main {
@@ -23,5 +24,13 @@ public class Main {
         AnimaleDomestice animalDomestic1 = AnimaleDomestice.getInstantaAD("Gaina", AnimaleDomestice.tipAnimal.DE_CONSUM);
         System.out.println(animalDomestic1.getSpecie());
         System.out.println(animalDomestic1.getTip());
+
+        //
+        ConfigurationManager config = ConfigurationManager.getInstance();
+
+      
+        System.out.println(config.getNume());
+
+
     }
 }
