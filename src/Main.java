@@ -6,6 +6,9 @@ import Factory1.DreptunghiFactory;
 import Factory1.FactoryForma;
 import Factory1.Forma;
 import PregatireTest.ConfigurationManager;
+import SimpleFactory.TipVehicul;
+import SimpleFactory.Vehicul;
+import SimpleFactory.VehiculFactory;
 import ThreadSafe.AnimaleDomestice;
 
 public class Main {
@@ -44,6 +47,17 @@ public class Main {
         forma = ff1.creareForma();
         forma.deseneaza();
 
+        //Simple factory
+        try {
+            Vehicul masina = VehiculFactory.creareVehicul(TipVehicul.Masina, "Honda", 800);
+            masina.afisareComponente();
+
+            Vehicul avion = VehiculFactory.creareVehicul(TipVehicul.Avion, "Boeing", 280);
+            avion.afisareComponente();
+        }
+        catch (Exception exc) {
+            System.out.println(exc.getMessage());
+        }
+        }
 
     }
-}
