@@ -1,6 +1,10 @@
 import Continente.Asia;
 import Continente.Europa;
 import EagerInitialization.Moldova;
+import Factory1.CercFactory;
+import Factory1.DreptunghiFactory;
+import Factory1.FactoryForma;
+import Factory1.Forma;
 import PregatireTest.ConfigurationManager;
 import ThreadSafe.AnimaleDomestice;
 
@@ -30,6 +34,15 @@ public class Main {
 
       
         System.out.println(config.getNume());
+
+
+        //Factory Metod
+        FactoryForma ff1 = null;
+        ff1 = new CercFactory();
+
+        Forma forma = null;
+        forma = ff1.creareForma();
+        forma.deseneaza();
 
 
     }
