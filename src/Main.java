@@ -1,3 +1,4 @@
+import Builder.*;
 import Continente.Asia;
 import Continente.Europa;
 import EagerInitialization.Moldova;
@@ -10,6 +11,9 @@ import SimpleFactory.TipVehicul;
 import SimpleFactory.Vehicul;
 import SimpleFactory.VehiculFactory;
 import ThreadSafe.AnimaleDomestice;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -35,7 +39,7 @@ public class Main {
         //
         ConfigurationManager config = ConfigurationManager.getInstance();
 
-      
+
         System.out.println(config.getNume());
 
 
@@ -54,10 +58,19 @@ public class Main {
 
             Vehicul avion = VehiculFactory.creareVehicul(TipVehicul.Avion, "Boeing", 280);
             avion.afisareComponente();
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             System.out.println(exc.getMessage());
         }
-        }
+
+
+        List<IIncrediente> lista = new ArrayList<>();
+        lista.add(new Blat(ETipBlat.ITALIAN, "Blat subtire italian"));
+
+        BuilderPizza builder = new BuilderPizza(new DimensiuneMare(), lista, 40);
+        Pizza pizza = builder.build();
+
+        System.out.println(pizza);
+
 
     }
+}
