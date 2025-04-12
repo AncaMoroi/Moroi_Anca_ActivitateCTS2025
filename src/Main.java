@@ -72,5 +72,9 @@ public class Main {
         System.out.println(pizza);
 
 
+        //Singleton.ex1
+
+
+
     }
 }
