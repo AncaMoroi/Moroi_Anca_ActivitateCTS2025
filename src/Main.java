@@ -1,79 +1,85 @@
-import Builder.*;
-import Continente.Asia;
-import Continente.Europa;
-import EagerInitialization.Moldova;
-import Factory1.CercFactory;
-import Factory1.DreptunghiFactory;
-import Factory1.FactoryForma;
-import Factory1.Forma;
-import PregatireTest.ConfigurationManager;
-import SimpleFactory.TipVehicul;
-import SimpleFactory.Vehicul;
-import SimpleFactory.VehiculFactory;
-import ThreadSafe.AnimaleDomestice;
 
+import Comportamentale.ChainOfResponsabilities.*;
+import Comportamentale2.ChainOfResponsailities2.Bucatar;
+import Comportamentale2.ChainOfResponsailities2.BucatarSef;
+import Comportamentale2.ChainOfResponsailities2.Comanda;
+import Comportamentale2.ChainOfResponsailities2.Ospatar;
+import Comportamentale3.ChainOfResponsabilities3.*;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Main {
+    public Main() {
+    }
+
     public static void main(String[] args) {
-        //Singleton lazy innitialization
-        Europa europa = Europa.getInstance("Romania", "romana");
-        Europa e = Europa.getInstance("Franta", "franceza");
-        System.out.println(europa.getLbVorbita());
-        System.out.println(europa.getLbVorbita());
-
-        Asia asia = Asia.getInstanta("Tailanda", "hindusa");
-        System.out.println(asia.getReligie());
-
-        //eagerinitialization
-        Moldova moldova = Moldova.getInstantaM();
-        System.out.println(moldova.getOras());
-        System.out.println(moldova.getFacultati());
-
-        //threadSafe
-        AnimaleDomestice animalDomestic1 = AnimaleDomestice.getInstantaAD("Gaina", AnimaleDomestice.tipAnimal.DE_CONSUM);
-        System.out.println(animalDomestic1.getSpecie());
-        System.out.println(animalDomestic1.getTip());
-
-        //
-        ConfigurationManager config = ConfigurationManager.getInstance();
 
 
-        System.out.println(config.getNume());
+        //ChainOfResponsabilities
+        Notificator notificatorSMS = new NotificariSMS();
+        Notificator notificatorMal = new NotificatMail();
+        Notificator notificatorManager = new NotificatorManager();
+
+        notificatorSMS.setUrmatorulNotificaor(notificatorMal);
+        notificatorMal.setUrmatorulNotificaor(notificatorManager);
+
+        Client client = new Client("Anca", null, null);
+        notificatorSMS.notifica(client, "Test");
 
 
-        //Factory Metod
-        FactoryForma ff1 = null;
-        ff1 = new CercFactory();
+        //chainOfResponsabilies2
 
-        Forma forma = null;
-        forma = ff1.creareForma();
-        forma.deseneaza();
+        Ospatar ospatar = new Ospatar();
+        Bucatar bucatar = new Bucatar();
+        BucatarSef bucatarSef = new BucatarSef();
 
-        //Simple factory
+        ospatar.setNextHandler(bucatar);
+        bucatar.setNextHandler(bucatarSef);
+
+        Comanda cmd1 = new Comanda("Pizza", 5, 12);
+        Comanda cm2 = new Comanda("Paste", 2, 3);
+
+        System.out.println("Comanda1");
+        ospatar.procesareComanda(cmd1);
+
+        System.out.println("Comanda2");
+        ospatar.procesareComanda(cm2);
+
+
+        Verificator receptie = new Receptie();
+        Verificator ss = new SelfService();
+        Verificator teh = new Technician();
+
+        receptie.setNextHandler(teh);
+        teh.setNextHandler(ss);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date dataRCA = null;
         try {
-            Vehicul masina = VehiculFactory.creareVehicul(TipVehicul.Masina, "Honda", 800);
-            masina.afisareComponente();
-
-            Vehicul avion = VehiculFactory.creareVehicul(TipVehicul.Avion, "Boeing", 280);
-            avion.afisareComponente();
-        } catch (Exception exc) {
-            System.out.println(exc.getMessage());
+            dataRCA = sdf.parse("25-06-2025");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        Date dataRCAa = null;
+        try {
+            dataRCAa = sdf.parse("25-06-2024");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
 
+        Masina masina1 = new Masina("Honda", true, dataRCA, 4);
+        Masina masina2 = new Masina("Dacia", false, dataRCAa, 1);
 
-        List<IIncrediente> lista = new ArrayList<>();
-        lista.add(new Blat(ETipBlat.ITALIAN, "Blat subtire italian"));
+        System.out.println("--------- Verificare masina 1 ---------");
+        receptie.procesareCerere(masina1);
 
-        BuilderPizza builder = new BuilderPizza(new DimensiuneMare(), lista, 40);
-        Pizza pizza = builder.build();
-
-        System.out.println(pizza);
-
-
-        //Singleton.ex1
-
+        System.out.println("--------- Verificare masina 2 ---------");
+        receptie.procesareCerere(masina2);
 
 
     }
